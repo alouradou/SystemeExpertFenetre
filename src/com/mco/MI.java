@@ -17,27 +17,27 @@ public class MI {
     public boolean condDansBDF(String condition){
         for (int i=0;i<baseFaits.getTaille();i++)
             if (condition.equals(baseFaits.getContenu().get(i))){
-                System.out.println(condition + " dans la bdf");
+                //System.out.println(condition + " dans la bdf");
                 return true;
             }
-        System.out.println(condition + " pas dans la bdf");
+        //System.out.println(condition + " pas dans la bdf");
         return false;
     }
 
 
     public boolean regleDeclenchee(Regle r){
         if (condDansBDF(r.getValeurs()[4])) {
-            System.out.println(r + " est bien déclenchée mais conclusion déjà dans la bdf");
+            //System.out.println(r + " est bien déclenchée mais conclusion déjà dans la bdf");
             return false;
         }
         for (int i=0;i<=3;i++) {
             if (!r.getValeurs()[i].equals(""))
                 if (!condDansBDF(r.getValeurs()[i])) {
-                    System.out.println(r + " n'est pas déclenchée");
+                    //System.out.println(r + " n'est pas déclenchée");
                     return false;
                 }
         }
-        System.out.println(r + " est bien déclenchée");
+        //System.out.println(r + " est bien déclenchée");
         return true;
     }
 
@@ -55,7 +55,7 @@ public class MI {
                         cpt++;
                         declenchee[i] = true;
                         baseFaits.ajoutBDF(rcourante.getValeurs()[4]);
-                        System.out.println("Fait ajoute : " + rcourante.getValeurs()[4]);
+                        System.out.println("Fait ajouté : " + rcourante.getValeurs()[4]);
                     }
                 }
             }

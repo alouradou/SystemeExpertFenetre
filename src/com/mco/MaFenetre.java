@@ -22,6 +22,7 @@ public class MaFenetre extends JFrame {
     private JScrollPane panneau;
     private JLabel TabTitre;
     private JTextField saisie;
+    private JCheckBox checkBox;
 
     private int width = 800;
     private int height = 600;
@@ -59,7 +60,7 @@ public class MaFenetre extends JFrame {
 
     public void Init_Accessoires() {
         trace = new JLabel();
-        trace.setBounds(width/10, 70+height/10, 200, 50);
+        trace.setBounds( width-width/10-90, height-height/3+30, 200, 50);
         getContentPane().add(trace);
 
         quit = new JButton("Quitter");
@@ -78,10 +79,10 @@ public class MaFenetre extends JFrame {
         });
 
         // ajout des boutons ChAva et ChArr
-        chava = new JButton("Chainage Avant");
+        chava = new JButton("Chaînage Avant");
         chava.setBounds(width-width/10-90, height/2, 150, 30);
         chava.setFocusable(false);
-        charr = new JButton("Chainage Arriere");
+        charr = new JButton("Chaînage Arrière");
         charr.setBounds(width-width/10-90, 30+height/2, 150, 30);
         charr.setFocusable(false);
         getContentPane().add(chava);
@@ -92,11 +93,11 @@ public class MaFenetre extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // lancer le chainage avant ...
-                trace.setText("Lancement chainage avant");
+                trace.setText("<html>Lancement chaînage<br>avant</html>");
                 System.out.println("Lancement chainage avant");
                 moteurInf.chainageAvant();
 
-                if (true)
+                if (checkBox.isSelected()) // permet de choisir si l'action de chainage modifie le fichier
                     moteurInf.getBaseFaits().majFichier();
 
                 updateJList();
@@ -108,9 +109,14 @@ public class MaFenetre extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // lancer le chainage arriere ...
-                trace.setText("Lancement chainage arriere");
+                trace.setText("<html>Lancement chaînage<br>arrière</html>");
                 System.out.println("Lancement chainage arriere");
                 moteurInf.chainageArriere(saisie.getText());
+
+                if (checkBox.isSelected()) // permet de choisir si l'action de chainage modifie le fichier
+                    moteurInf.getBaseFaits().majFichier();
+
+                updateJList();
             }
         });
 
@@ -154,9 +160,8 @@ public class MaFenetre extends JFrame {
 
                 // Display the selected item
                 Object selected = cBox.getSelectedItem();
-                trace.setText("Selected Item = " + selected);
-                String command = e.getActionCommand();
-                System.out.println("Action Command = " + command);
+                if (selected!=null)
+                    trace.setText("<html>Élément sélectionné<br>dans la base de faits<br>-> " + selected + "</html>");
             }
         });
 
@@ -166,11 +171,11 @@ public class MaFenetre extends JFrame {
         // Créer l'objet JList avec ses éléments
         lis = new JList(listModelFaitsDeduits);
         lis.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        lis.setFocusable(false);
 
         // Ajouter la JList dans un JScrollPane
         pane = new JScrollPane(lis);
         pane.setBounds(width/2, 50+height/10, 200, 50);
-        pane.setFocusable(false);
         JLabel faitsDeduits = new JLabel("Faits Déduits");
         faitsDeduits.setBounds(width/2, height/10, 200, 50);
 
@@ -182,7 +187,8 @@ public class MaFenetre extends JFrame {
                     // Get the source of the component, which is our list
                     JList liste = (JList) e.getSource();
                     Object selected = liste.getSelectedValue();
-                    trace.setText("Element choisi = " + selected);
+                    if (selected!=null)
+                        trace.setText("<html>Élément sélectionné<br>dans les faits déduits<br>-> " + selected + "</html>");
                 }
             }
         });
@@ -206,7 +212,6 @@ public class MaFenetre extends JFrame {
 
         for (int i=0;i<moteurInf.getBaseRegles().getContenu().size();i++){
             Regle r = moteurInf.getBaseRegles().getContenu().get(i);
-            System.out.println(i);
             if (i == 0){
                 String[] schema = r.getSchema();
                 for (int j=0;j<schema.length;j++){
@@ -225,8 +230,9 @@ public class MaFenetre extends JFrame {
         JTable table = new JTable(donnees, colonnes);
         JScrollPane panneau = new JScrollPane(table);
         table.setFillsViewportHeight(true);
+        table.setFocusable(false);
         panneau.setBounds(width/10, height-height/3, 200+4*width/10, height/3-50);
-        JLabel TabTitre = new JLabel("Base de Regles");
+        JLabel TabTitre = new JLabel("Base de Règles");
         TabTitre.setBounds(width/10, height-height/3-50, 200, 50);
         getContentPane().add(TabTitre);
         getContentPane().add(panneau);
@@ -238,14 +244,19 @@ public class MaFenetre extends JFrame {
         for (int i=0;i<moteurInf.getBaseFaits().getContenu().size();i++) {
             listModelFaitsDeduits.addElement(moteurInf.getBaseFaits().getContenu().toArray()[i]);
         }
-        System.out.println("Updated table");
+        //System.out.println("Updated table");
     }
 
     private void Init_Checkbox(){
-        JCheckBox checkBox = new JCheckBox();
-        checkBox.setBounds(width-width/10-90, height/2-30, 30, 30);
+        checkBox = new JCheckBox();
+        checkBox.setBounds(width-width/10-90, height/2-45, 30, 30);
         checkBox.setFocusable(false);
         getContentPane().add(checkBox);
+
+        JLabel checkBoxIndication = new JLabel();
+        checkBoxIndication.setBounds(width-width/10-55, height/2-60, 180, 60);
+        checkBoxIndication.setText("<html>Enregistrer<br>le chaînage</html>");
+        getContentPane().add(checkBoxIndication);
     }
 
     public void image(){

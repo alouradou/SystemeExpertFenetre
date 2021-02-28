@@ -13,7 +13,7 @@ public class StreamDeRegles {
         try{
             file = new FileReader(fileName);
             buffer = new BufferedReader(file);
-            System.out.println("File ready");
+            //System.out.println("File ready");
         }
         catch(Exception e){
             System.out.println("[Error opening file in StreamDeRegles]" + e);
