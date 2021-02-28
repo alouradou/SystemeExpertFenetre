@@ -93,7 +93,7 @@ public class MI {
                 }
             }
         }
-        baseFaits.majFichier();
+        // baseFaits.majFichier(); Laissé au loisir de la class MaFenetre()
         return s;
     }
 

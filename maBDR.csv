@@ -1,4 +1,7 @@
 condition1;condition2;condition3;condition4;conclusion
-a;b;;;c
-c;;;;d
-a;;;;d
+légumes;fruits;;;healthy
+légumes;imagination;;;fruits
+healthy;;;;instagrammeuse
+instagrammeuse;;;;riche
+riche;;;;argent
+fruits;argent;légumes;pas_vegan;caviar

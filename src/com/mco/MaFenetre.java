@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Vector;
 import javax.swing.*;
 import java.awt.event.*;
+import java.util.concurrent.TimeUnit;
 import javax.swing.event.*; // pour le Listener de la JList
 
 public class MaFenetre extends JFrame {
@@ -109,9 +110,11 @@ public class MaFenetre extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // lancer le chainage arriere ...
-                trace.setText("<html>Lancement chaînage<br>arrière...</html>");
+                //trace.setText("<html>Lancement chaînage<br>arrière...</html>");
                 System.out.println("Lancement chainage arriere");
-                moteurInf.chainageArriere(saisie.getText());
+                if (moteurInf.chainageArriere(saisie.getText()))
+                    trace.setText("<html>Chaînage arrière<br>-> Conclusion vérifiée</html>");
+                else trace.setText("<html>Chaînage arrière<br>-> Non vérifié</html>");;
 
                 if (checkBox.isSelected()) // permet de choisir si l'action de chainage modifie le fichier
                     moteurInf.getBaseFaits().majFichier();
