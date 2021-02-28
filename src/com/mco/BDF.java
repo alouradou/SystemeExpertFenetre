@@ -23,8 +23,8 @@ public class BDF {
             buffer = new BufferedReader(new FileReader(fileName));
             while (line != null){
                 line = buffer.readLine();
-                if (line != null && line != "") {
-                    ajoutBDF(line);
+                if (line != null && !line.equals("")) {
+                    contenu.add(line);
                 }
             }
             buffer.close();
@@ -32,6 +32,7 @@ public class BDF {
         catch (Exception e) {
             System.out.println("[Error opening file in BDF]" + e);
         }
+        System.out.println(contenu);
         taille = contenu.size();
     }
 
@@ -54,7 +55,7 @@ public class BDF {
         try {
             file = new FileWriter(fileName);
             for (int i=0;i<taille;i++){
-                if (contenu.get(i) != null && contenu.get(i) != ""){
+                if (contenu.get(i) != null && !contenu.get(i).equals("")){
                     file.write(contenu.get(i)+"\n");
                     //System.out.println("Écriture du fichier : "+contenu.get(i)+"\n");
                 }

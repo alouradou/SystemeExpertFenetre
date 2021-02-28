@@ -24,14 +24,13 @@ public class MaFenetre extends JFrame {
     private JTextField saisie;
 
     private int width = 800;
-    private int height = 500;
+    private int height = 600;
 
 
     private MI moteurInf = new MI("maBDF.txt","maBDR.csv");
-    private ArrayList<String> contenuBDF;
-    private ArrayList<Regle> contenuBDR;
 
-    private DefaultListModel listModelFaitsDeduits;
+    private DefaultListModel listModelFaitsDeduits = new DefaultListModel();
+
 
 
 
@@ -41,11 +40,6 @@ public class MaFenetre extends JFrame {
 
         setLayout(null);
 
-        BDF maBDF = new BDF("maBDF.txt");
-        contenuBDF = maBDF.getContenu();
-
-        BDR maBDR = new BDR("maBDR.csv");
-        contenuBDR = maBDR.getContenu();
 
         Init_Accessoires();
 
@@ -54,14 +48,11 @@ public class MaFenetre extends JFrame {
 
         image();
 
-        listModelFaitsDeduits = new DefaultListModel();
-        contenuBDF = moteurInf.getBaseFaits().getContenu();
-        for (int i=0;i<contenuBDF.size();i++) {
-            listModelFaitsDeduits.addElement(contenuBDF.toArray()[i]);
-        }
         updateJList();
 
         Init_Faits();
+
+        Init_Checkbox();
 
         setVisible(true);
     }
@@ -81,7 +72,7 @@ public class MaFenetre extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // quand on a clique sur le bouton "Quitter", on sort du programme
-                System.out.println("Sortie du programme");
+                System.out.println("Sortie par le bouton Quitter");
                 System.exit(0);
             }
         });
@@ -89,8 +80,10 @@ public class MaFenetre extends JFrame {
         // ajout des boutons ChAva et ChArr
         chava = new JButton("Chainage Avant");
         chava.setBounds(width-width/10-90, height/2, 150, 30);
+        chava.setFocusable(false);
         charr = new JButton("Chainage Arriere");
         charr.setBounds(width-width/10-90, 30+height/2, 150, 30);
+        charr.setFocusable(false);
         getContentPane().add(chava);
         getContentPane().add(charr);
 
@@ -100,12 +93,12 @@ public class MaFenetre extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 // lancer le chainage avant ...
                 trace.setText("Lancement chainage avant");
-                System.out.println("Lancement chainage avant sur moteurInf : " + moteurInf);
+                System.out.println("Lancement chainage avant");
                 moteurInf.chainageAvant();
-                contenuBDF = moteurInf.getBaseFaits().getContenu();
-                for (int i=0;i<contenuBDF.size();i++) {
-                    listModelFaitsDeduits.addElement(contenuBDF.toArray()[i]);
-                }
+
+                if (true)
+                    moteurInf.getBaseFaits().majFichier();
+
                 updateJList();
 
             }
@@ -117,10 +110,7 @@ public class MaFenetre extends JFrame {
                 // lancer le chainage arriere ...
                 trace.setText("Lancement chainage arriere");
                 System.out.println("Lancement chainage arriere");
-                MI moteurInf = new MI("maBDF.txt","maBDR.csv");
-                System.out.println(moteurInf);
-                System.out.println(saisie.getText());
-                System.out.println(moteurInf.chainageArriere(saisie.getText()));
+                moteurInf.chainageArriere(saisie.getText());
             }
         });
 
@@ -149,10 +139,11 @@ public class MaFenetre extends JFrame {
 
         /*String[] bookTitles = new String[] {"Effective Java", "Head First Java", "Thinking in Java", "Java for Dummies"};*/
         cb = new JComboBox();
-        for (int i=0;i<contenuBDF.size();i++){
-            cb.addItem(contenuBDF.get(i));
+        for (int i=0;i<moteurInf.getBaseFaits().getContenu().size();i++){
+            cb.addItem(moteurInf.getBaseFaits().getContenu().get(i));
         }
         cb.setBounds(width/10, 40+height/10, 200, 50);
+        cb.setFocusable(false);
         getContentPane().add(cb);
 
         // traitement d'un clic sur le bouton : définition d'un Listener/Ecouteur
@@ -179,8 +170,9 @@ public class MaFenetre extends JFrame {
         // Ajouter la JList dans un JScrollPane
         pane = new JScrollPane(lis);
         pane.setBounds(width/2, 50+height/10, 200, 50);
-        JLabel FaitsDeduits = new JLabel("Faits Deduits");
-        FaitsDeduits.setBounds(width/2, height/10, 200, 50);
+        pane.setFocusable(false);
+        JLabel faitsDeduits = new JLabel("Faits Déduits");
+        faitsDeduits.setBounds(width/2, height/10, 200, 50);
 
         // Create an ActionListener for the JList component
         lis.addListSelectionListener(new ListSelectionListener() {
@@ -195,7 +187,7 @@ public class MaFenetre extends JFrame {
             }
         });
 
-        getContentPane().add(FaitsDeduits);
+        getContentPane().add(faitsDeduits);
         getContentPane().add(pane);
 
     }
@@ -212,8 +204,8 @@ public class MaFenetre extends JFrame {
         // Contenu de la table
         Vector<Vector<String>> donnees = new Vector<Vector<String>>();
 
-        for (int i=0;i<contenuBDR.size();i++){
-            Regle r = contenuBDR.get(i);
+        for (int i=0;i<moteurInf.getBaseRegles().getContenu().size();i++){
+            Regle r = moteurInf.getBaseRegles().getContenu().get(i);
             System.out.println(i);
             if (i == 0){
                 String[] schema = r.getSchema();
@@ -242,12 +234,18 @@ public class MaFenetre extends JFrame {
     }
 
     private void updateJList(){
-        Object[] data = contenuBDF.toArray();
         listModelFaitsDeduits.removeAllElements();
-        for (int i=0;i<contenuBDF.size();i++) {
-            listModelFaitsDeduits.addElement(data[i]);
+        for (int i=0;i<moteurInf.getBaseFaits().getContenu().size();i++) {
+            listModelFaitsDeduits.addElement(moteurInf.getBaseFaits().getContenu().toArray()[i]);
         }
         System.out.println("Updated table");
+    }
+
+    private void Init_Checkbox(){
+        JCheckBox checkBox = new JCheckBox();
+        checkBox.setBounds(width-width/10-90, height/2-30, 30, 30);
+        checkBox.setFocusable(false);
+        getContentPane().add(checkBox);
     }
 
     public void image(){
