@@ -94,7 +94,7 @@ public class MaFenetre extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 // lancer le chainage avant ...
                 trace.setText("<html>Lancement chaînage<br>avant</html>");
-                System.out.println("Lancement chainage avant");
+                System.out.println("Lancement chainage avant...");
                 moteurInf.chainageAvant();
 
                 if (checkBox.isSelected()) // permet de choisir si l'action de chainage modifie le fichier
@@ -110,7 +110,7 @@ public class MaFenetre extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 // lancer le chainage arriere ...
                 trace.setText("<html>Lancement chaînage<br>arrière</html>");
-                System.out.println("Lancement chainage arriere");
+                System.out.println("Lancement chainage arriere...");
                 moteurInf.chainageArriere(saisie.getText());
 
                 if (checkBox.isSelected()) // permet de choisir si l'action de chainage modifie le fichier
@@ -145,6 +145,7 @@ public class MaFenetre extends JFrame {
 
         /*String[] bookTitles = new String[] {"Effective Java", "Head First Java", "Thinking in Java", "Java for Dummies"};*/
         cb = new JComboBox();
+        cb.addItem("- Base de Faits -");
         for (int i=0;i<moteurInf.getBaseFaits().getContenu().size();i++){
             cb.addItem(moteurInf.getBaseFaits().getContenu().get(i));
         }
@@ -175,7 +176,7 @@ public class MaFenetre extends JFrame {
 
         // Ajouter la JList dans un JScrollPane
         pane = new JScrollPane(lis);
-        pane.setBounds(width/2, 50+height/10, 200, 50);
+        pane.setBounds(width/2, 50+height/10, 200, 100);
         JLabel faitsDeduits = new JLabel("Faits Déduits");
         faitsDeduits.setBounds(width/2, height/10, 200, 50);
 
@@ -252,6 +253,15 @@ public class MaFenetre extends JFrame {
         checkBox.setBounds(width-width/10-90, height/2-45, 30, 30);
         checkBox.setFocusable(false);
         getContentPane().add(checkBox);
+
+        checkBox.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                if (checkBox.isSelected())
+                    trace.setText("<html>Sera enregistré dans<br>le fichier de la base<br>de faits</html>");
+                else trace.setText("");
+            }
+        });
 
         JLabel checkBoxIndication = new JLabel();
         checkBoxIndication.setBounds(width-width/10-55, height/2-60, 180, 60);
