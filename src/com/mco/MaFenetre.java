@@ -93,8 +93,8 @@ public class MaFenetre extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // lancer le chainage avant ...
-                trace.setText("<html>Lancement chaînage<br>avant</html>");
-                System.out.println("Lancement chainage avant...");
+                trace.setText("<html>Lancement chaînage<br>avant...</html>");
+                System.out.println("Lancement chainage avant");
                 moteurInf.chainageAvant();
 
                 if (checkBox.isSelected()) // permet de choisir si l'action de chainage modifie le fichier
@@ -109,8 +109,8 @@ public class MaFenetre extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // lancer le chainage arriere ...
-                trace.setText("<html>Lancement chaînage<br>arrière</html>");
-                System.out.println("Lancement chainage arriere...");
+                trace.setText("<html>Lancement chaînage<br>arrière...</html>");
+                System.out.println("Lancement chainage arriere");
                 moteurInf.chainageArriere(saisie.getText());
 
                 if (checkBox.isSelected()) // permet de choisir si l'action de chainage modifie le fichier
